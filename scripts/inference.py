@@ -136,8 +136,7 @@ def inference_process(args: argparse.Namespace):
     if args.checkpoint is not None:
         config.audio_ckpt_dir = args.checkpoint
     # 2. runtime variables
-    device = torch.device(
-        "cuda") if torch.cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
     if config.weight_dtype == "fp16":
         weight_dtype = torch.float16
     elif config.weight_dtype == "bf16":
@@ -243,7 +242,7 @@ def inference_process(args: argparse.Namespace):
     m,u = net.load_state_dict(
         torch.load(
             os.path.join(audio_ckpt_dir, "net.pth"),
-            map_location="cpu",
+            map_location="cuda",
         ),
     )
     assert len(m) == 0 and len(u) == 0, "Fail to load correct checkpoint."
